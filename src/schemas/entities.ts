@@ -150,6 +150,27 @@ export const CardLabelSchema = z.object({
 });
 export type CardLabel = z.infer<typeof CardLabelSchema>;
 
+// Card membership (junction table: card <-> user)
+export const CardMembershipSchema = z.object({
+  id: z.string(),
+  cardId: z.string(),
+  userId: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string().nullable().optional(),
+});
+export type CardMembership = z.infer<typeof CardMembershipSchema>;
+
+// Board membership (junction table: board <-> user)
+export const BoardMembershipSchema = z.object({
+  id: z.string(),
+  boardId: z.string(),
+  userId: z.string(),
+  role: z.string().optional(),
+  createdAt: z.string(),
+  updatedAt: z.string().nullable().optional(),
+});
+export type BoardMembership = z.infer<typeof BoardMembershipSchema>;
+
 // Comment schema
 export const CommentSchema = z.object({
   id: z.string(),

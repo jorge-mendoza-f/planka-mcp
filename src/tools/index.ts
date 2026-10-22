@@ -5,6 +5,7 @@ import { navigationTools } from "./navigation.js";
 import { cardTools } from "./cards.js";
 import { taskTools } from "./tasks.js";
 import { labelTools } from "./labels.js";
+import { memberTools } from "./members.js";
 import { commentTools } from "./comments.js";
 import { listTools } from "./lists.js";
 
@@ -16,6 +17,7 @@ export const allTools = [
   ...cardTools,
   ...taskTools,
   ...labelTools,
+  ...memberTools,
   ...commentTools,
   ...listTools,
 ];
@@ -60,5 +62,6 @@ export { navigationTools } from "./navigation.js";
 export { cardTools } from "./cards.js";
 export { taskTools } from "./tasks.js";
 export { labelTools } from "./labels.js";
+export { memberTools } from "./members.js";
 export { commentTools } from "./comments.js";
 export { listTools } from "./lists.js";

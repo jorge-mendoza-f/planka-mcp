@@ -60,7 +60,7 @@ export const getStructureTool = {
 export const getBoardTool = {
   name: "planka_get_board",
   description:
-    "Get a board with all its lists, cards, and labels. Use this to see everything on a board.",
+    "Get a board with all its lists, cards, labels, and members. Use this to see everything on a board.",
   inputSchema: {
     type: "object" as const,
     properties: {
@@ -110,6 +110,11 @@ export const getBoardTool = {
         id: l.id,
         name: l.name,
         color: l.color,
+      })),
+      members: details.members.map((u) => ({
+        id: u.id,
+        name: u.name,
+        username: u.username,
       })),
       lists: details.lists
         .filter((l) => l.name !== null) // Filter archive/trash

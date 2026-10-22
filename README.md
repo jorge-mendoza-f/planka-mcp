@@ -7,7 +7,7 @@ A Model Context Protocol (MCP) server for [PLANKA](https://planka.app) kanban bo
 - Full PLANKA 2.0 API support
 - Type-safe with Zod validation
 - Optimized for agent workflows (combined operations, sensible defaults)
-- 13 tools covering cards, tasks, labels, comments, and lists
+- 16 tools covering cards, tasks, labels, members, comments, and lists
 
 ## Installation
 
@@ -78,7 +78,7 @@ Add to `~/.claude.json`:
 | Tool | Description |
 |------|-------------|
 | `planka_get_structure` | Get projects, boards, and lists hierarchy |
-| `planka_get_board` | Get a board with all cards, lists, and labels |
+| `planka_get_board` | Get a board with all cards, lists, labels, and members |
 
 ### Cards
 
@@ -87,7 +87,7 @@ Add to `~/.claude.json`:
 | `planka_create_card` | Create a card (optionally with tasks) |
 | `planka_update_card` | Update card properties |
 | `planka_move_card` | Move card to different list/position |
-| `planka_get_card` | Get card details with tasks/comments |
+| `planka_get_card` | Get card details with tasks/comments/labels/members |
 | `planka_delete_card` | Delete a card |
 
 ### Tasks
@@ -104,6 +104,12 @@ Add to `~/.claude.json`:
 |------|-------------|
 | `planka_manage_labels` | Create/update/delete board labels |
 | `planka_set_card_labels` | Add/remove labels from a card |
+
+### Members
+
+| Tool | Description |
+|------|-------------|
+| `planka_set_card_members` | Add/remove members (users) on a card. Get user IDs from `planka_get_board` |
 
 ### Comments
 
@@ -147,6 +153,7 @@ This server is designed for PLANKA 2.0 and handles the API differences from 1.x:
 
 - Card creation includes required `type` field
 - Label endpoints use `/card-labels` path
+- Member endpoints use `/card-memberships` path
 - Optional fields handled gracefully
 
 ## Development

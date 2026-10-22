@@ -13,6 +13,8 @@ import {
   CommentSchema,
   UserSchema,
   CardLabelSchema,
+  CardMembershipSchema,
+  BoardMembershipSchema,
   AttachmentSchema,
 } from "./entities.js";
 
@@ -56,6 +58,8 @@ export const CommentsResponse = MultiItemResponse(CommentSchema);
 
 export const CardLabelResponse = SingleItemResponse(CardLabelSchema);
 
+export const CardMembershipResponse = SingleItemResponse(CardMembershipSchema);
+
 // Auth response
 export const AuthResponse = z.object({
   item: z.string(), // JWT token
@@ -71,6 +75,7 @@ export const BoardIncludedSchema = z
     taskLists: z.array(TaskListSchema).optional(),
     tasks: z.array(TaskSchema).optional(),
     users: z.array(UserSchema).optional(),
+    boardMemberships: z.array(BoardMembershipSchema).optional(),
   })
   .passthrough(); // Allow additional fields
 
@@ -82,6 +87,7 @@ export const CardIncludedSchema = z
     comments: z.array(CommentSchema).optional(),
     labels: z.array(LabelSchema).optional(),
     cardLabels: z.array(CardLabelSchema).optional(),
+    cardMemberships: z.array(CardMembershipSchema).optional(),
     attachments: z.array(AttachmentSchema).optional(),
     users: z.array(UserSchema).optional(),
   })

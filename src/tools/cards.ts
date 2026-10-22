@@ -10,6 +10,7 @@ import {
 } from "../operations/cards.js";
 import { createTasks } from "../operations/tasks.js";
 import { addLabelToCard } from "../operations/labels.js";
+import { getBoard } from "../operations/boards.js";
 import { PlankaError } from "../errors.js";
 
 /**
@@ -133,7 +134,7 @@ export const createCardTool = {
 export const getCardTool = {
   name: "planka_get_card",
   description:
-    "Get full details of a card including tasks, comments, labels, and attachments.",
+    "Get full details of a card including tasks, comments, labels, members, and attachments.",
   inputSchema: {
     type: "object" as const,
     properties: {
@@ -147,6 +148,12 @@ export const getCardTool = {
   handler: async (params: { cardId: string }) => {
     try {
       const details = await getCard(params.cardId);
+
+      // Card responses may not include user records; fall back to the board's users for names
+      let users = details.users;
+      if (details.cardMemberships.some((m) => !users.some((u) => u.id === m.userId))) {
+        users = (await getBoard(details.card.boardId)).users;
+      }
 
       const formatted = {
         card: {
@@ -175,6 +182,14 @@ export const getCardTool = {
             id: cl.labelId,
             name: label?.name,
             color: label?.color,
+          };
+        }),
+        members: details.cardMemberships.map((m) => {
+          const user = users.find((u) => u.id === m.userId);
+          return {
+            id: m.userId,
+            name: user?.name,
+            username: user?.username,
           };
         }),
         attachments: details.attachments.map((a) => ({
