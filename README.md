@@ -9,67 +9,75 @@ A Model Context Protocol (MCP) server for [PLANKA](https://planka.app) kanban bo
 - Optimized for agent workflows (combined operations, sensible defaults)
 - 16 tools covering cards, tasks, labels, members, comments, and lists
 
-## Installation
+## Team Setup
+
+This fork adds card member support and is not published to npm. Each team member installs it straight from GitHub. It runs locally on their machine (stdio), so there is no server to deploy.
+
+### Prerequisites
+
+- Node.js 18 or later
+- Read access to `jorge-mendoza-f/planka-mcp` on GitHub (SSH or HTTPS)
+- Your own PLANKA account, added as a member of every board you want to work with
+
+### Claude Code
 
 ```bash
-npm install @gogogadgetbytes/planka-mcp
+claude mcp add planka \
+  -e PLANKA_BASE_URL=https://planka.example.com \
+  -e PLANKA_AGENT_EMAIL=you@example.com \
+  -e PLANKA_AGENT_PASSWORD=your-password \
+  -- npx -y github:jorge-mendoza-f/planka-mcp
 ```
 
-Or run directly:
+Run `claude mcp list` to check the server shows as connected.
 
-```bash
-npx @gogogadgetbytes/planka-mcp
+### Claude Desktop
+
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows), then restart Claude Desktop:
+
+```json
+{
+  "mcpServers": {
+    "planka": {
+      "command": "npx",
+      "args": ["-y", "github:jorge-mendoza-f/planka-mcp"],
+      "env": {
+        "PLANKA_BASE_URL": "https://planka.example.com",
+        "PLANKA_AGENT_EMAIL": "you@example.com",
+        "PLANKA_AGENT_PASSWORD": "your-password"
+      }
+    }
+  }
+}
 ```
 
-## Configuration
+The first start takes a little longer because npx downloads and builds the server.
 
 ### Environment Variables
 
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `PLANKA_BASE_URL` | Yes | Your PLANKA server URL |
-| `PLANKA_AGENT_EMAIL` | Yes | Agent user email |
-| `PLANKA_AGENT_PASSWORD` | Yes | Agent user password |
+| `PLANKA_AGENT_EMAIL` | Yes | Your PLANKA email or username |
+| `PLANKA_AGENT_PASSWORD` | Yes | Your PLANKA password |
 
-### Claude Desktop
+Use your own PLANKA account rather than a shared one, so changes are attributed to you. Never commit these values to a repository (for example in a shared `.mcp.json`).
 
-Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
+### Updating
 
-```json
-{
-  "mcpServers": {
-    "planka": {
-      "command": "npx",
-      "args": ["@gogogadgetbytes/planka-mcp"],
-      "env": {
-        "PLANKA_BASE_URL": "https://planka.example.com",
-        "PLANKA_AGENT_EMAIL": "agent@example.com",
-        "PLANKA_AGENT_PASSWORD": "your-password"
-      }
-    }
-  }
-}
+npx caches the build. To pick up new changes, clear the npx cache (macOS and Linux) and restart Claude:
+
+```bash
+rm -rf ~/.npm/_npx
 ```
 
-### Claude Code
+To pin a specific version instead, use `github:jorge-mendoza-f/planka-mcp#<tag-or-commit>`.
 
-Add to `~/.claude.json`:
+### Troubleshooting
 
-```json
-{
-  "mcpServers": {
-    "planka": {
-      "command": "npx",
-      "args": ["@gogogadgetbytes/planka-mcp"],
-      "env": {
-        "PLANKA_BASE_URL": "https://planka.example.com",
-        "PLANKA_AGENT_EMAIL": "agent@example.com",
-        "PLANKA_AGENT_PASSWORD": "your-password"
-      }
-    }
-  }
-}
-```
+- **Server fails to start:** check `node --version` is 18 or later, and that you can clone the repository.
+- **Authentication errors:** check the three environment variables, and that you can log in to PLANKA in a browser with the same details.
+- **Board or card not found, or cannot assign members:** your PLANKA account must be a member of the board.
 
 ## Available Tools
 
